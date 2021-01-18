@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+        integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+    <title>CoinMarketCap</title>
+</head>
+
+<body>
+    <div id="coins"></div>
+
+    <script type="text/javascript">
+
+        //My api key
+        var apikey = {
+            key: '92ec2a6f-8f0f-46df-8d93-272cf688f1c5'
+        }
+
+        //GET Fetch Requisition
+        fetch('https://pro-api.coinmarketcap.com/v1/cryptocurrency/map?CMC_PRO_API_KEY=' +
+            apikey.key)
+            .then((response) => {
+                if (!response.ok) throw new Error('Erro ao executar a requisição, status ' + response.status);
+                return response.json();
+            })
+            .then((api) => {
+                showCoins(api);
+            })
+            .catch((error) => {
+                console.error(error.message)
+            });
+
+
+
+        const showCoins = function (api) {
+            var texto = "";
+            // Get 10 coins and symbols
+
+            for (let i = 0; i < 10; i++) {
+
+                // Show API information
+                texto = texto + `
+            <div class="media">
+                <img src="coin.jpg" class="align-self-center mr-3" alt="coin" width="60" height="60">
+                <div class="media-body">
+                    <h5 class="mt-2">${api.data[i].name}</h5>
+                    <p>${api.data[i].symbol}</p>
+                    <small>${api.data[i].first_historical_data}</small>
+                </div>
+            </div>
+            `;
+                document.getElementById("coins").innerHTML = texto;
+            }
+        }
+    </script>
+
+</body>
+
+</html>
